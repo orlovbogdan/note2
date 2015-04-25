@@ -1,0 +1,7 @@
+$('body').append('<%= j render('form') %>');
+$('.new_note').draggable({
+    stop: function( event, ui ) {
+        $(this).find('input[name="note[xpos]"]').val($(this).css('left'));
+        $(this).find('input[name="note[ypos]"]').val($(this).css('top'));
+    }
+});

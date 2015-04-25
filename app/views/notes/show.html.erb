@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @note.text %>
+</p>
+
+<p>
+  <strong>Xpos:</strong>
+  <%= @note.xpos %>
+</p>
+
+<p>
+  <strong>Ypos:</strong>
+  <%= @note.ypos %>
+</p>
+
+<p>
+  <strong>Width:</strong>
+  <%= @note.width %>
+</p>
+
+<p>
+  <strong>Height:</strong>
+  <%= @note.height %>
+</p>
+
+<%= link_to 'Edit', edit_note_path(@note) %> |
+<%= link_to 'Back', notes_path %>

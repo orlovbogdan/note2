@@ -1,0 +1,9 @@
+<%= form_for(@note, remote: true,:authenticity_token => true, html: { class: 'new-sub-note-form'}) do |f| %>
+    <%= f.fields_for :parent_note_links, @note.parent_note_links.new do |g| %>
+        <%= g.hidden_field :position, value: params[:position] %>
+        <%= g.hidden_field :parent_id, value: params[:parent_id] %>
+    <% end %>
+    <div class="field">
+      <%= f.text_area :text %>
+    </div>
+<% end %>

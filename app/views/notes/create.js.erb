@@ -1,0 +1,8 @@
+<% unless @root_note %>
+  $('input[value="<%= params[:authenticity_token] %>').closest('.note').find('ol').append('<li><%=j render 'sub_note', note: @note %></li>')
+<% else %>
+ $('#selectable').append('<%=j render @root_note %>');
+<% end %>
+init_notes();
+$('input[value="<%= params[:authenticity_token] %>').closest('form').remove();
+

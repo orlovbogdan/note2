@@ -1,0 +1,11 @@
+<div data-update-url="<%= note_path(note) %>" class="note" style="margin-left: 10px;">
+  <div class="disclose ui-icon ui-icon-minusthick" style="float: left; display: block">+</div>
+  <div style="float:left"><%= best_in_place note, :text, :as => :textarea, :display_with => lambda { |v| simple_format(v, {}, wrapper_tag: 'div') } %></div>
+  <div style="position: absolute;right: 0px;margin-top: -7px;"><%= link_to 'x', note, method: :delete, remote: true %></div>
+  <div class="actions">
+    <%= link_to('+', new_note_path, class: 'new-sub-note', style: 'text-decoration: none;', data: {note_id: note.id}) %>
+  </div>
+  <ol>
+    <%= render 'sub_notes', notes: note.children if note.children.present? %>
+  </ol>
+</div>
