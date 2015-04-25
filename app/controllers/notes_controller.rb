@@ -36,10 +36,10 @@ class NotesController < ApplicationController
   # PATCH/PUT /notes/1
   # PATCH/PUT /notes/1.json
   def update
-    @note.update(note_params)
     if params[:old_parent_id]
       NoteLink.where(note_id: @note.id, parent_id: params[:old_parent_id]).destroy_all
     end
+    @note.update(note_params)
     respond_to do |format|
         format.html { redirect_to @note, notice: 'Note was successfully updated.' }
         format.json { render :show, status: :ok, location: @note }

@@ -190,7 +190,7 @@ function init_notes(){
         /* The magic tric: */
         connectWith: '.sub_notes',
         start: function(event, ui){
-            ui.item.data('parent_id',ui.item.parent().siblings('.note').find('.actions .new-sub-note').attr('data-note-id'));
+            ui.item.data('parent_id',ui.item.parent().attr('data-note-id'));
             $(ui.item).parents().css('overflow', 'visible');
         },
         stop: function(event, ui){
@@ -202,7 +202,7 @@ function init_notes(){
                 },
                 url: $(ui.item).find('.note').data('update-url'),
                 type: 'PATCH',
-                data: JSON.stringify({old_parent_id: ui.item.data('parent_id'), note: { parent_note_links_attributes: {'0': { parent_id: ui.item.parent().siblings('.note').find('.actions .new-sub-note').attr('data-note-id') }}}})
+                data: JSON.stringify({old_parent_id: ui.item.data('parent_id'), note: { parent_note_links_attributes: {'0': { parent_id: ui.item.parent().attr('data-note-id'), position: ui.item.prevAll().size() + 1 }}}})
             });
         },
         sort: function (event, ui) {

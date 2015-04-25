@@ -6,6 +6,6 @@
     <%= link_to('+', new_note_path, class: 'new-sub-note', style: 'text-decoration: none;', data: {note_id: note.id}) %>
   </div>
 </div>
-<ol>
-  <%= render 'sub_notes', notes: note.children if note.children.present? %>
+<ol data-note-id="<%= note.id %>">
+  <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.children.present? %>
 </ol>

@@ -4,8 +4,8 @@
   <div class="actions">
     <%= link_to('+', new_note_path, class: 'new-sub-note', style: 'text-decoration: none;', data: {note_id: note.id}) %>
   </div>
-  <ol class="sub_notes">
-    <%= render 'sub_notes', notes: note.children if note.children.present? %>
+  <ol class="sub_notes" data-note-id="<%= note.id %>">
+    <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.children.present? %>
   </ol>
   <div style="clear: both;"></div>
 </div>
