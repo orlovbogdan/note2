@@ -1,5 +1,5 @@
 <% unless @root_note %>
-  $('input[value="<%= params[:authenticity_token] %>').closest('.note').find('ol').append('<li><%=j render 'sub_note', note: @note %></li>')
+  $('input[value="<%= params[:authenticity_token] %>').closest('ol').append('<li><%=j render 'sub_note', note: @note %></li>')
 <% else %>
  $('#selectable').append('<%=j render @root_note %>');
 <% end %>

@@ -5,7 +5,7 @@
   <div class="actions">
     <%= link_to('+', new_note_path, class: 'new-sub-note', style: 'text-decoration: none;', data: {note_id: note.id}) %>
   </div>
-  <ol>
-    <%= render 'sub_notes', notes: note.children if note.children.present? %>
-  </ol>
 </div>
+<ol>
+  <%= render 'sub_notes', notes: note.children if note.children.present? %>
+</ol>

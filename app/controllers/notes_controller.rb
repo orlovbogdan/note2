@@ -36,14 +36,13 @@ class NotesController < ApplicationController
   # PATCH/PUT /notes/1
   # PATCH/PUT /notes/1.json
   def update
+    @note.update(note_params)
+    if params[:old_parent_id]
+      NoteLink.where(note_id: @note.id, parent_id: params[:old_parent_id]).destroy_all
+    end
     respond_to do |format|
-      if @note.update(note_params)
         format.html { redirect_to @note, notice: 'Note was successfully updated.' }
         format.json { render :show, status: :ok, location: @note }
-      else
-        format.html { render :edit }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
-      end
     end
   end
 
@@ -61,6 +60,6 @@ class NotesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def note_params
-    params.require(:note).permit(:text, :xpos, :ypos, :width, :height, parent_note_links_attributes: [:parent_id, :position, :new_parent_id])
+    params.require(:note).permit(:text, :xpos, :ypos, :width, :height, parent_note_links_attributes: [:parent_id, :position])
   end
 end

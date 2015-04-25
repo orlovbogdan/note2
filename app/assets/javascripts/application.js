@@ -35,7 +35,11 @@ $(function () {
         var th = this;
         var pos =  2;
         $.get($(this).attr('href'), { parent_id: $(this).attr('data-note-id'), position: pos}, function(data){
-            $(th).closest('.note').find('ol').append(data);
+            if ($(th).closest('.note').find('.sub_notes').length){
+                $(th).closest('.note').find('.sub_notes').append(data);
+            } else {
+              $(th).closest('.note').siblings('ol').append(data);
+            }
         });
         e.preventDefault();
     });
@@ -186,7 +190,7 @@ function init_notes(){
         /* The magic tric: */
         connectWith: '.sub_notes',
         start: function(event, ui){
-            ui.item.data('parent_id',ui.item.parent().siblings('.actions').find('.new-sub-note').attr('data-note-id'));
+            ui.item.data('parent_id',ui.item.parent().siblings('.note').find('.actions .new-sub-note').attr('data-note-id'));
             $(ui.item).parents().css('overflow', 'visible');
         },
         stop: function(event, ui){
@@ -198,12 +202,12 @@ function init_notes(){
                 },
                 url: $(ui.item).find('.note').data('update-url'),
                 type: 'PATCH',
-                data: JSON.stringify({note: {parent_note_links_attributes: {'0': {note_id: $(ui.item).find('.note').children('.actions').find('.new-sub-note').attr('data-note-id'), parent_id: ui.item.data('parent_id'), new_parent_id: ui.item.parent().siblings('.actions').find('.new-sub-note').attr('data-note-id') }}}})
+                data: JSON.stringify({old_parent_id: ui.item.data('parent_id'), note: { parent_note_links_attributes: {'0': { parent_id: ui.item.parent().siblings('.note').find('.actions .new-sub-note').attr('data-note-id') }}}})
             });
         },
         sort: function (event, ui) {
             if ($(ui.item).parents('ol').size() == 1) {
-              ui.item.parent().parent().css('top',ui.offset.top).css('left',ui.offset.left);
+              //ui.item.parent().parent().css('visibility', 'hidden');
             }
         }
     });
