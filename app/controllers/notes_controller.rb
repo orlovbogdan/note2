@@ -4,7 +4,7 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all#joins(:parent_note_links)
+    @notes = Note.includes(:parent_note_links).where(note_links: {parent_id: nil})
   end
 
   # GET /notes/1

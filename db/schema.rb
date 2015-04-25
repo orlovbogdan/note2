@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150425085624) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "note_links", force: :cascade do |t|
     t.integer  "note_id"
     t.integer  "parent_id"
@@ -22,10 +25,10 @@ ActiveRecord::Schema.define(version: 20150425085624) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "note_links", ["link_type_id"], name: "index_note_links_on_link_type_id"
-  add_index "note_links", ["note_id"], name: "index_note_links_on_note_id"
-  add_index "note_links", ["parent_id"], name: "index_note_links_on_parent_id"
-  add_index "note_links", ["position"], name: "index_note_links_on_position"
+  add_index "note_links", ["link_type_id"], name: "index_note_links_on_link_type_id", using: :btree
+  add_index "note_links", ["note_id"], name: "index_note_links_on_note_id", using: :btree
+  add_index "note_links", ["parent_id"], name: "index_note_links_on_parent_id", using: :btree
+  add_index "note_links", ["position"], name: "index_note_links_on_position", using: :btree
 
   create_table "notes", force: :cascade do |t|
     t.text     "text"

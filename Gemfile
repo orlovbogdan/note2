@@ -47,4 +47,5 @@ end
 gem 'jquery-ui-rails'
 gem 'acts_as_list'
 gem 'best_in_place'
+gem 'pg'
 
