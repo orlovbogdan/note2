@@ -1,0 +1,2 @@
+$('ol[data-note-id="<%= @note.id %>"] > li').hide();
+$('ol[data-note-id="<%= @note.id %>"]').parent().children('.note').find('.expand_hide').replaceWith('<%= render 'expand_link', note: @note %>')

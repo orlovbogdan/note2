@@ -1,0 +1,2 @@
+$('ol[data-note-id="<%= @note.id %>"]').append('<%=j render 'sub_notes', notes: @note.child_note_links.order(:position)  %>');
+$('ol[data-note-id="<%= @note.id %>"]').parent().children('.note').find('.expand_hide').replaceWith('<%= render 'expand_link', note: @note %>')

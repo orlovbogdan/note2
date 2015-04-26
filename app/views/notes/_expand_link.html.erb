@@ -1,0 +1,1 @@
+<a class="expand_hide <%= (note.child_note_links.exists? && note.expand) ? 'hide' : 'expand' %>" href="<%= !note.expand ? expand_note_path(note) : hide_note_path(note) %>" data-remote="true" data-method="post" style="float: left; display: block"><%= note.expand ? '-' : '+' if note.child_note_links.exists?  %> </a>

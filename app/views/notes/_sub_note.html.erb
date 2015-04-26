@@ -1,5 +1,5 @@
 <div data-update-url="<%= note_path(note) %>" class="note" style="margin-left: 10px;">
-  <div class="expand" style="float: left; display: block">+</div>
+ <%= render 'expand_link', note: note %>
   <div style="float:left"><%= best_in_place note, :text, :as => :textarea, :display_with => lambda { |v| simple_format(v, {}, wrapper_tag: 'div') } %></div>
   <div style="position: absolute;right: 0px;margin-top: -7px;"><%= link_to 'x', note, method: :delete, remote: true %></div>
   <div class="actions" style="clear: both">
@@ -8,5 +8,5 @@
   </div>
 </div>
 <ol data-note-id="<%= note.id %>">
-  <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.children.present? %>
+  <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.child_note_links.exists? && note.expand %>
 </ol>
