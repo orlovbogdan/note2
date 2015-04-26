@@ -1,5 +1,5 @@
 <% notes.each do |note| %>
-    <li>
+    <li data-position="<%= note.position %>">
       <%= render 'sub_note', note: note.child %>
     </li>
 <% end %>

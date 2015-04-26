@@ -32,13 +32,31 @@ $(function () {
 
 
     $(document).on('click','.new-sub-note', function(e){
+        var th = $(e.target).closest('li') || $(e.target).closest('.note')
+        var pos = th.find('ol:first-child > li').size() + 1;
+        $.get($(this).attr('href'), { parent_id: $(this).attr('data-note-id'), position: pos }, function(data){
+              th.children('ol').append(data);
+        });
+        e.preventDefault();
+    });
+
+    $(document).on('click','.new-sibling-note', function(e){
+        var th = $(e.target).closest('li') || $(e.target).closest('.note');
+        var pos = th.prevAll('li').size() + 1;
+        $.get($(this).attr('href'), { parent_id: $(this).closest('ol').attr('data-note-id'), position: pos }, function(data){
+            th.after(data);
+        });
+        e.preventDefault();
+    });
+
+    $(document).on('click','', function(e){
         var th = this;
-        var pos =  2;
+        var pos = $(e.target).closest('li')
         $.get($(this).attr('href'), { parent_id: $(this).attr('data-note-id'), position: pos}, function(data){
             if ($(th).closest('.note').find('.sub_notes').length){
                 $(th).closest('.note').find('.sub_notes').append(data);
             } else {
-              $(th).closest('.note').siblings('ol').append(data);
+                $(th).closest('.note').siblings('ol').append(data);
             }
         });
         e.preventDefault();
