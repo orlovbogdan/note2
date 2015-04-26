@@ -42,7 +42,7 @@ $(function () {
 
     $(document).on('click','.new-sibling-note', function(e){
         var th = $(e.target).closest('li') || $(e.target).closest('.note');
-        var pos = th.prevAll('li').size() + 1;
+        var pos = th.prevAll('li').size() + 2;
         $.get($(this).attr('href'), { parent_id: $(this).closest('ol').attr('data-note-id'), position: pos }, function(data){
             th.after(data);
         });

@@ -1,5 +1,9 @@
 <% unless @root_note %>
-  $('input[value="<%= params[:authenticity_token] %>').closest('ol').children('li:nth-child(<%= params[:note][:parent_note_links_attributes]['0'][:position] %>)').after('<li><%=j render 'sub_note', note: @note %></li>')
+<% if params[:note][:parent_note_links_attributes]['0'][:position].to_i - 1 > 0 %>
+  $('input[value="<%= params[:authenticity_token] %>').closest('ol').children('li:nth-child(<%= params[:note][:parent_note_links_attributes]['0'][:position].to_i - 1 %>)').after('<li><%=j render 'sub_note', note: @note %></li>')
+<% else %>
+$('input[value="<%= params[:authenticity_token] %>').closest('ol').append('<li><%=j render 'sub_note', note: @note %></li>')
+<% end %>
 <% else %>
  $('#selectable').append('<%=j render @root_note %>');
 <% end %>

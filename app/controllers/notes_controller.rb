@@ -29,7 +29,7 @@ class NotesController < ApplicationController
       @note = Note.create(note_params)
     else
       @root_note = Note.create(note_params.merge(text: ''))
-      @note = Note.create(note_params.merge(parent_note_links_attributes: {'0'=> {parent_id: @root_note.id.to_s}}))
+      @note = Note.create(note_params.merge(parent_note_links_attributes: {'0'=> {parent_id: @root_note.id.to_s, position: 1}}))
     end
   end
 
