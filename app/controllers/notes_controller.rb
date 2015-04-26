@@ -4,7 +4,7 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.includes(:parent_note_links).where(note_links: {parent_id: nil})
+      @notes = Note.includes(:parent_note_links).where(note_links: {parent_id: nil})
   end
 
   # GET /notes/1
@@ -52,6 +52,16 @@ class NotesController < ApplicationController
     @note.destroy
   end
 
+  def expand
+    @note = Note.find(params[:id])
+    @note.update!(expand: true)
+  end
+
+  def hide
+    @note = Note.find(params[:id])
+    @note.update!(expand: false)
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_note
@@ -62,4 +72,5 @@ class NotesController < ApplicationController
   def note_params
     params.require(:note).permit(:text, :xpos, :ypos, :width, :height, parent_note_links_attributes: [:parent_id, :position])
   end
+
 end
