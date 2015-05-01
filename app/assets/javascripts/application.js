@@ -232,8 +232,9 @@ function init_notes(){
 
 
 
-            var elements = ui.item.siblings('.selected.hidden').not('.ui-sortable-placeholder');
+            var elements = $('.selected.hidden').not('ul .selected.hidden').not('.ui-sortable-placeholder');//ui.item.siblings('.selected.hidden').not('.ui-sortable-placeholder');
             ui.item.data('items', elements);
+            elements.hide();
         },
         stop: function(event, ui){
             $('.note').css('overflow', 'auto');
@@ -249,7 +250,8 @@ function init_notes(){
 
 
 
-            ui.item.siblings('.selected').removeClass('hidden');
+            //ui.item.siblings('.selected').removeClass('hidden');
+            $('.selected').not('ul .selected').removeClass('hidden');
             $('.selected').removeClass('selected');
         },
         sort: function (event, ui) {
@@ -272,7 +274,8 @@ function init_notes(){
                 item.addClass('selected');
             var elements = $('.selected').not('.ui-sortable-placeholder').clone();
             var helper = $('<ul/>');
-            item.siblings('.selected').addClass('hidden');
+            //item.siblings('.selected').addClass('hidden');
+            $('.selected').not('ul .selected').addClass('hidden');
             return helper.append(elements);
         }
     });
