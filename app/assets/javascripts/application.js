@@ -196,7 +196,7 @@ function init_notes(){
 
 
 
-    $('li').on('click', function(e) {
+    $(document).on('click','li', function(e) {
         if (e.target.tagName !== 'A') {
             e.stopPropagation();
             if (!e.metaKey) {

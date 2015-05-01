@@ -8,5 +8,5 @@
   </div>
 </div>
 <ol data-note-id="<%= note.id %>">
-  <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.child_note_links.exists? && note.expand %>
+  <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.child_note_links.exists? && (note.expand || note.expand.nil?)  %>
 </ol>
