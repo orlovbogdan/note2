@@ -1,11 +1,8 @@
-<div data-update-url="<%= note_path(note) %>" class="note" style="position:absolute;top: <%=note.ypos %>px; left: <%=note.xpos %>px;  border: black solid 1px; padding: 3px; width: <%=note.width %>px; height: <%=note.height %>px;">
-  <div style="float:left"><%= best_in_place note, :text, :as => :textarea, :display_with => lambda { |v| simple_format(v, {}, wrapper_tag: 'div') } %></div>
-  <div style="position: absolute;right: 0px;margin-top: -7px;"><%= link_to 'x', note, method: :delete, remote: true %></div>
+<div data-update-url="<%= note_path(note) %>" class="note root-note" style="position:absolute;top: <%=note.ypos %>px; left: <%=note.xpos %>px;  border: black solid 1px; padding: 3px; width: <%=note.width %>px; height: <%=note.height %>px;">
   <div class="actions">
     <%= link_to('+', new_note_path, class: 'new-sub-note', style: 'text-decoration: none;', data: {note_id: note.id}) %>
   </div>
   <ol class="sub_notes" data-note-id="<%= note.id %>">
     <%= render 'sub_notes', notes: note.child_note_links.order(:position) if note.children.present? %>
   </ol>
-  <div style="clear: both;"></div>
 </div>

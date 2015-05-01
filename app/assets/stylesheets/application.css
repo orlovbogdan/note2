@@ -36,7 +36,7 @@ html, body{height: 100%; width: 100%}
 #selectable {margin: 0; padding: 0; height: 100%;width: 100%; position: relative;}
 
 .ui-selecting {background: #FECA40;}
-.ui-selected {background: #F39814; color: white;}
+.selected, .ui-selected {background: #F39814; color: white;}
 .ui-selectable-helper {position: absolute; z-index: 100; border:1px dotted black;}
 
 
@@ -51,8 +51,6 @@ ol.sub_notes, ol.sub_notes ol {
 }
 
 ol.sub_notes {
-    width: 42.5%;
-    float: left;
     margin: 5% 0 5% 5%;
 }
 
@@ -66,4 +64,10 @@ ol.sub_notes {
     padding: 3px;
     margin: 0;
     cursor: move;
+}
+
+
+
+textarea {
+    width: 100%;
 }

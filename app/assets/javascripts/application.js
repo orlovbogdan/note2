@@ -32,10 +32,12 @@ $(function () {
 
 
     $(document).on('click','.new-sub-note', function(e){
-        var th = $(e.target).closest('li') || $(e.target).closest('.note')
-        var pos = th.find('ol:first-child > li').size() + 1;
+        var th1 = $(e.target).closest('li')
+        var th2 = $(e.target).closest('.note')
+        var th = th1.length ?  th1 : th2
+        var pos = 1;//th.find('ol:first-child > li').size() + 1;
         $.get($(this).attr('href'), { parent_id: $(this).attr('data-note-id'), position: pos }, function(data){
-              th.children('ol').append(data);
+              th.children('ol').prepend(data)//append(data);
         });
         e.preventDefault();
     });
@@ -91,7 +93,7 @@ $(function () {
 
     $('html').click(function(e){
         if (e.target.getAttribute('id') == 'selectable'){
-            $("*").removeClass("ui-selected");
+            $("*").removeClass("ui-selected").removeClass('selected');
         }
     });
 
@@ -155,22 +157,24 @@ function init_notes(){
         distance: 1
     });
 
-    $("#selectable > div").click( function(e){
-        if (e.metaKey == false) {
-            $("*").removeClass("ui-selected");
-            $(this).addClass("ui-selecting");
-        }
-        else {
-            if ($(this).hasClass("ui-selected")) {
-                $(this).removeClass("ui-selected");
-                $(this).find('*').removeClass("ui-selected");
-            }
-            else {
+    $(".root-note").click( function(e){
+        if (e.target === this) {
+            if (e.metaKey == false) {
+                $("*").removeClass("ui-selected");
                 $(this).addClass("ui-selecting");
             }
-        }
+            else {
+                if ($(this).hasClass("ui-selected")) {
+                    $(this).removeClass("ui-selected");
+                    $(this).find('*').removeClass("ui-selected");
+                }
+                else {
+                    $(this).addClass("ui-selecting");
+                }
+            }
 
-        $("#selectable").data("ui-selectable")._mouseStop(null);
+            $("#selectable").data("ui-selectable")._mouseStop(null);
+        }
     });
 
 
@@ -192,6 +196,18 @@ function init_notes(){
 
 
 
+    $('li').on('click', function(e) {
+        if (e.target.tagName !== 'A') {
+            e.stopPropagation();
+            if (!e.metaKey) {
+                $('*').removeClass('selected');
+            }
+            ;
+            $(this).toggleClass('selected');
+        }
+    });
+
+
     $('ol.sub_notes').nestedSortable({
         disableNesting: 'no-nest',
         forcePlaceholderSize: true,
@@ -204,12 +220,20 @@ function init_notes(){
         tabSize: 25,
         tolerance: 'pointer',
         toleranceElement: '> div',
+        isTree: true,
+        expandOnHover: 700,
+        startCollapsed: false,
 
         /* The magic tric: */
         connectWith: '.sub_notes',
         start: function(event, ui){
             ui.item.data('parent_id',ui.item.parent().attr('data-note-id'));
             $(ui.item).parents().css('overflow', 'visible');
+
+
+
+            var elements = ui.item.siblings('.selected.hidden').not('.ui-sortable-placeholder');
+            ui.item.data('items', elements);
         },
         stop: function(event, ui){
             $('.note').css('overflow', 'auto');
@@ -222,11 +246,34 @@ function init_notes(){
                 type: 'PATCH',
                 data: JSON.stringify({old_parent_id: ui.item.data('parent_id'), note: { parent_note_links_attributes: {'0': { parent_id: ui.item.parent().attr('data-note-id'), position: ui.item.prevAll().size() + 1 }}}})
             });
+
+
+
+            ui.item.siblings('.selected').removeClass('hidden');
+            $('.selected').removeClass('selected');
         },
         sort: function (event, ui) {
             if ($(ui.item).parents('ol').size() == 1) {
               //ui.item.parent().parent().css('visibility', 'hidden');
             }
+        },
+        update: function(event, ui) {
+            console.log('Relocated item');
+            ui.item.before(ui.item.data('items'));
+        },
+        receive: function(e, ui) {
+            ui.item.before(ui.item.data('items'));
+        },
+
+        helper: function(e, item) {
+            console.log('parent-helper');
+            console.log(item);
+            if (!item.hasClass('selected'))
+                item.addClass('selected');
+            var elements = $('.selected').not('.ui-sortable-placeholder').clone();
+            var helper = $('<ul/>');
+            item.siblings('.selected').addClass('hidden');
+            return helper.append(elements);
         }
     });
 
