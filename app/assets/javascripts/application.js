@@ -223,35 +223,46 @@ function init_notes(){
         isTree: true,
         expandOnHover: 700,
         startCollapsed: false,
-
-        /* The magic tric: */
         connectWith: '.sub_notes',
         start: function(event, ui){
-            ui.item.data('parent_id',ui.item.parent().attr('data-note-id'));
             $(ui.item).parents().css('overflow', 'visible');
 
-
-
-            var elements = $('.selected.hidden').not('ul .selected.hidden').not('.ui-sortable-placeholder');//ui.item.siblings('.selected.hidden').not('.ui-sortable-placeholder');
-            ui.item.data('items', elements);
-            elements.hide();
+            var itemdata = [];
+            $('.selected.hidden').each(function(){
+                itemdata.push({update_url: $(this).children('.note').data('update-url'), old_parent_id: $(this).parent().attr('data-note-id')})
+            });
+            ui.item.data('items', itemdata);
+            $('.selected.hidden').hide();
         },
         stop: function(event, ui){
             $('.note').css('overflow', 'auto');
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                url: $(ui.item).find('.note').data('update-url'),
-                type: 'PATCH',
-                data: JSON.stringify({old_parent_id: ui.item.data('parent_id'), note: { parent_note_links_attributes: {'0': { parent_id: ui.item.parent().attr('data-note-id'), position: ui.item.prevAll().size() + 1 }}}})
-            });
+            if (window.changeposition == true) {
+                window.changeposition = false;
+                $.each(ui.item.data('items'), function (i, e) {
+                    $.ajax({
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        url: e.update_url,
+                        type: 'PATCH',
+                        data: JSON.stringify({old_parent_id: e.old_parent_id,
+                            note: {
+                                parent_note_links_attributes: {
+                                    '0': {
+                                        parent_id: $(ui.item).parent().attr('data-note-id'),
+                                        position: $(ui.item).prevAll().size() + 1
+                                    }
+                                }
+                            }
+                        })
+                    });
+                });
+            } else {
+                $('.selected').show();
+            };
 
-
-
-            //ui.item.siblings('.selected').removeClass('hidden');
-            $('.selected').not('ul .selected').removeClass('hidden');
+            $('.selected').removeClass('hidden');
             $('.selected').removeClass('selected');
         },
         sort: function (event, ui) {
@@ -260,23 +271,16 @@ function init_notes(){
             }
         },
         update: function(event, ui) {
-            console.log('Relocated item');
-            ui.item.before(ui.item.data('items'));
-        },
-        receive: function(e, ui) {
-            ui.item.before(ui.item.data('items'));
+            ui.item.before($('.selected').show());
+            window.changeposition = true;
         },
 
         helper: function(e, item) {
-            console.log('parent-helper');
-            console.log(item);
             if (!item.hasClass('selected'))
                 item.addClass('selected');
-            var elements = $('.selected').not('.ui-sortable-placeholder').clone();
-            var helper = $('<ul/>');
-            //item.siblings('.selected').addClass('hidden');
-            $('.selected').not('ul .selected').addClass('hidden');
-            return helper.append(elements);
+            var hel = $('<ul/>').append($('.selected').clone());
+            $('.selected').addClass('hidden');
+            return hel
         }
     });
 
