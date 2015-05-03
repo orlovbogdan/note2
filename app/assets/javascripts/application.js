@@ -251,7 +251,7 @@ function init_notes(){
                                 parent_note_links_attributes: {
                                     '0': {
                                         parent_id: $(ui.item).parent().attr('data-note-id'),
-                                        position: $(ui.item).prevAll().size() + 1
+                                        position: $(ui.item).prevAll().size() - ui.item.data('items').length + 2
                                     }
                                 }
                             }
