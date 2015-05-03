@@ -24,6 +24,12 @@
 
 $(function () {
 
+    $('html').click(function(e){
+        if (e.target.getAttribute('id') == 'selectable'){
+            $("*").removeClass("ui-selected").removeClass('selected');
+        }
+    });
+
     $('html').dblclick(function(e){
         if (e.target.getAttribute('id') == 'selectable'){
             $.get($('body').data('new_note'), {ypos: e.pageY, xpos: e.pageX}, null, 'script' );
@@ -87,15 +93,41 @@ $(function () {
     });
 
 
-    init_notes();
 
+    $(document).on('click', ".root-note", function(e){
+        if (e.target === this) {
+            if (e.metaKey == false) {
+                $("*").removeClass("ui-selected");
+                $(this).addClass("ui-selecting");
+            }
+            else {
+                if ($(this).hasClass("ui-selected")) {
+                    $(this).removeClass("ui-selected");
+                    $(this).find('*').removeClass("ui-selected");
+                }
+                else {
+                    $(this).addClass("ui-selecting");
+                }
+            }
 
-
-    $('html').click(function(e){
-        if (e.target.getAttribute('id') == 'selectable'){
-            $("*").removeClass("ui-selected").removeClass('selected');
+            $("#selectable").data("ui-selectable")._mouseStop(null);
         }
     });
+
+
+    $(document).on('click','li', function(e) {
+        if (e.target.tagName !== 'A') {
+            e.stopPropagation();
+            if (!e.metaKey) {
+                $('*').removeClass('selected');
+            }
+            ;
+            $(this).toggleClass('selected');
+        }
+    });
+
+
+    init_notes();
 
 })
 
@@ -157,26 +189,6 @@ function init_notes(){
         distance: 1
     });
 
-    $(".root-note").click( function(e){
-        if (e.target === this) {
-            if (e.metaKey == false) {
-                $("*").removeClass("ui-selected");
-                $(this).addClass("ui-selecting");
-            }
-            else {
-                if ($(this).hasClass("ui-selected")) {
-                    $(this).removeClass("ui-selected");
-                    $(this).find('*').removeClass("ui-selected");
-                }
-                else {
-                    $(this).addClass("ui-selecting");
-                }
-            }
-
-            $("#selectable").data("ui-selectable")._mouseStop(null);
-        }
-    });
-
 
     $('#selectable > .note').resizable({
         handles: "se",
@@ -190,20 +202,6 @@ function init_notes(){
                 type : 'PATCH',
                 data : JSON.stringify({width: ui.size.width, height: ui.size.height})
             });
-        }
-    });
-
-
-
-
-    $(document).on('click','li', function(e) {
-        if (e.target.tagName !== 'A') {
-            e.stopPropagation();
-            if (!e.metaKey) {
-                $('*').removeClass('selected');
-            }
-            ;
-            $(this).toggleClass('selected');
         }
     });
 
